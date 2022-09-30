@@ -5,31 +5,102 @@
   import TagList from './TagList.svelte'
   
   export let event: IEvent
-  export let showButtons = false
-  export let oddRow = false
-  
+  export let name = "unknown"
+
   const select = (id: string) => {
     goto(`${base}/event/${id}`)
   }
 </script>
 
-<table class='event { oddRow ? "oddRow" : ""}' on:click={() => select(event.id)}>
-  <tr><td><strong>Kind: </strong></td><td>{event?.kind}</td></tr>
-  <tr><td><strong>Content: </strong></td><td>{event?.content}</td></tr>
-  <tr><td><strong>Tags: </strong></td><td><TagList tags={event?.tags} /></td></tr>
-  <tr><td><strong>Created At: </strong></td><td>{event?.created_at}</td></tr>
-  <tr><td><strong>Pubkey: </strong></td><td>{event?.pubkey}</td></tr>
-  <tr><td><strong>ID: </strong></td><td>{event?.id}</td></tr>
-  <tr><td><strong>Signature: </strong></td><td>{event?.sig}</td></tr>
-</table>
+<div class="container">
+  <div class="comment__container opened" id="first-comment" >
+    <div class="comment__card" on:click={() => select(event.id)}>
+      <p><b> {name} </b>
+      </p>
+      <p>
+        {event?.content}
+      </p>
+      <div class="comment__card-footer">
+
+        <div>Likes 123</div>
+        <div class="show-replies">Reply 2</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <style>
-  .event {
-    border: 2px lightgray;
-    border-radius: 5px;
-  }
-  
-  .oddRow {
-    background-color: pink;
-  }
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+}
+
+.container {
+  width: min(90%, 1140px);
+  margin: 3rem auto;
+}
+
+.comment__container {
+  display: none;
+  position: relative;
+}
+
+.comment__container.opened {
+  display: block;
+}
+
+.comment__container::before {
+  content: "";
+  background-color: rgb(170, 170, 170);
+  position: absolute;
+  min-height: 100%;
+  width: 1px;
+  left: -10px;
+}
+
+.comment__container:not(:first-child) {
+  margin-left: 3rem;
+  margin-top: 1rem;
+}
+
+.comment__card {
+  padding: 20px;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 0.5rem;
+  min-width: 100%;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+}
+
+.comment__card h3,
+.comment__card p {
+  margin-bottom: 1rem;
+}
+
+.comment__card-footer {
+  display: flex;
+  font-size: 0.85rem;
+  opacity: 0.6;
+  gap: 30px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.show-replies {
+  cursor: pointer;
+}
+
 </style>
